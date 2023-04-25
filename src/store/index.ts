@@ -1,13 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { commonReducer } from './common';
+// import { commonReducer } from './common';
 import { profileReducer } from './profile';
-import { authReducer } from '../utils/auth';
+// import { authReducer } from './auth';
 
 export const rootReducer = combineReducers({
-  common: commonReducer,
+  // common: commonReducer,
   profile: profileReducer,
-  auth: authReducer,
+  // auth: authReducer,
 });
 
 const store = configureStore({
@@ -24,6 +24,6 @@ declare global {
   type GetState = () => ApplicationState;
 }
 
-declare module 'react-redux' {
-  export function useDispatch<TDispatch = AppDispatch>(): TDispatch;
-}
+// declare module 'react-redux' {
+//   export function useDispatch<TDispatch = AppDispatch>(): TDispatch;
+// }

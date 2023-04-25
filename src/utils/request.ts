@@ -1,14 +1,8 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponseTransformer } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponseTransformer, InternalAxiosRequestConfig } from 'axios';
 import isEmpty from 'lodash/isEmpty';
-import { v4 as uuid } from 'uuid';
+import { toast } from 'react-toastify';
 
-import { Env } from '../config/env';
-import store from '../store';
-// import { NotificationType } from 'models';
-// import { showNotification } from 'components';
-import { logout, refreshToken } from 'store/auth';
-import { setApiInfo } from 'store/common';
-import { stringify } from 'utils/query';
+import { stringify } from '../utils/query';
 
 export enum Methods {
   GET = 'GET',
@@ -36,75 +30,24 @@ export interface RequestConfig extends AxiosRequestConfig {
   method?: Methods;
 }
 
-const refreshTokenBlacklist = ['/auth/logout', '/auth/login/refresh', '/auth/login/email'];
-const errorNotificationBlacklist = ['/users/me'];
-
-let refreshPromise: Promise<any> | null = null;
-
-export function isInBlackList(url?: string, blacklist: string[] = []) {
-  if (!url) {
-    return false;
-  }
-
-  return blacklist.some((item) => url.includes(item));
+interface GenerateUrlSettings {
+  baseURL?: string;
+  resource?: string;
+  params?: Record<string, any>;
 }
-
-export function shouldCallRefreshToken(url?: string) {
-  return !isInBlackList(url, refreshTokenBlacklist);
-}
-
-export function shouldShowErrorNotification(url?: string) {
-  return !isInBlackList(url, errorNotificationBlacklist);
-}
-
-axios.defaults.headers.common['app-version'] = `${process.env.REACT_APP_VERSION}`;
-axios.defaults.headers.common['app-env'] = `${process.env.NODE_ENV}`;
-axios.defaults.headers.common.platform = 'react';
-
-axios.interceptors.request.use((requestConfig) => {
-  const { token } = store.getState().auth;
-
-  if (token && !Env.REACT_APP_USE_COOKIE) {
-    requestConfig.headers = {
-      ...requestConfig.headers,
-      Authorization: `bearer ${token}`,
-    };
-  }
-
-  return requestConfig;
-});
 
 axios.interceptors.response.use(
-  async (response) => {
-    if (response.headers) {
-      store.dispatch(
-        setApiInfo({ version: response.headers['api-version'] || '-', env: response.headers['api-env'] || '-' })
-      );
-    }
-    return response;
-  },
+  async (response) => response,
   async (error: AxiosError) => {
+    console.warn(error.message);
+    toast.error(error.message);
+
     if (error.response && error.config) {
-      const { status, statusText } = error.response;
+      const { status } = error.response;
 
-      if (status !== Status.UNAUTHORIZED && shouldShowErrorNotification(error.config.url)) {
-        showNotification({ content: `${status} - ${statusText}`, type: NotificationType.ERROR });
-      }
-
-      if (status === Status.UNAUTHORIZED && shouldCallRefreshToken(error.config.url)) {
-        try {
-          if (!refreshPromise) {
-            refreshPromise = store.dispatch(refreshToken());
-          }
-
-          await refreshPromise;
-
-          refreshPromise = null;
-
-          return await axios.request(error.config);
-        } catch (e) {
-          store.dispatch(logout());
-        }
+      if (status === Status.UNAUTHORIZED && localStorage.getItem('token')) {
+        localStorage.removeItem('token');
+        window.history.go(0);
       }
     }
 
@@ -112,11 +55,14 @@ axios.interceptors.response.use(
   }
 );
 
-interface GenerateUrlSettings {
-  baseURL?: string;
-  resource?: string;
-  params?: Record<string, any>;
-}
+axios.interceptors.request.use((requestConfig: InternalAxiosRequestConfig) => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    requestConfig.headers.Authorization = `Bearer ${token}`;
+  }
+  return requestConfig;
+});
 
 export function appendParamsToUrl(url: string, params?: Record<string, any>) {
   const query = params && !isEmpty(params) ? `?${stringify(params)}` : '';
@@ -149,9 +95,6 @@ async function request<T = void>({
     headers: {
       ...(headers || {}),
       ...(data instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {}),
-      'x-client-version': Env.REACT_APP_VERSION,
-      'x-client-env': Env.REACT_APP_ENV,
-      'x-request-id': uuid(),
     },
     url,
     transformResponse: [
