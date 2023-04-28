@@ -1,13 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-// import { commonReducer } from './common';
 import { profileReducer } from './profile';
-// import { authReducer } from './auth';
+import { gameReducer } from './game';
 
 export const rootReducer = combineReducers({
-  // common: commonReducer,
+  game: gameReducer,
   profile: profileReducer,
-  // auth: authReducer,
 });
 
 const store = configureStore({

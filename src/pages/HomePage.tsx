@@ -1,43 +1,47 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
+import { useSelector } from 'react-redux';
 import { Box, Button, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+
 import Hangman from '../components/hangman/Hangman';
 import HangmanWord from '../components/hangman/HangmanWord';
 import Keyboard from '../components/hangman/Keyboard';
+import { DifficultyLevel } from '../models/game.model';
+import { selectDifficultyLevel, selectGameState, selectWordToGuess, setDifficulty, setWordToGuess, setGame, selectGuessedLetters, addGuessedLetter } from '../store/game';
+import store from '../store';
 
-enum DifficultyLevel {
-  EASY = 'Easy',
-  MEDIUM = 'Medium',
-  HARD = 'Hard',
-}
 
 const HomePage = () => {
-  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | null>(null);
-
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const selectedDifficulty = useSelector(selectDifficultyLevel);
+  const gameInProgress = useSelector(selectGameState);  
+  const wordToGuess = useSelector(selectWordToGuess);
+  const guessedLetters = useSelector(selectGuessedLetters);
 
   const selectDifficulty = (event: React.MouseEvent<HTMLElement>, newValue: DifficultyLevel | null) => {
-    setSelectedDifficulty(newValue);
+    store.dispatch(setDifficulty(newValue));
   };
 
   const startGame = () => {
-    setIsPlaying(true);
+    console.log('startGame')
+    store.dispatch(setGame());
   };
 
-  const [wordToGuess, setWordToGuess] = useState('GETWORD');
-  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+
   const incorrectLetters = guessedLetters.filter((letter) => !wordToGuess.includes(letter));
   const isLoser = incorrectLetters.length >= 6;
   const isWinner = wordToGuess.split('').every((letter) => guessedLetters.includes(letter));
 
-  const addguessedLetter = useCallback(
-    (letter: string) => {
-      if (guessedLetters.includes(letter) || isLoser || isWinner) return;
+  const addLetter = (letter:string)=>{
+    store.dispatch(addGuessedLetter(letter));
+  }
 
-      setGuessedLetters((currentLetters) => [...currentLetters, letter]);
-    },
-    [guessedLetters, isWinner, isLoser]
-  );
+  // const addLetter = useCallback(
+  //   (letter: string) => {
+  //     if (guessedLetters.includes(letter) || isLoser || isWinner) return;
+
+  //     store.dispatch(addGuessedLetter(letter));
+  //   },
+  //   [guessedLetters, isWinner, isLoser]
+  // );
 
   useEffect(() => {
     const keyPressHandler = (e: KeyboardEvent) => {
@@ -46,7 +50,7 @@ const HomePage = () => {
       if (!key.match(/^[a-z]$/)) return;
 
       e.preventDefault();
-      addguessedLetter(key);
+      addLetter(key);
     };
 
     document.addEventListener('keypress', keyPressHandler);
@@ -62,9 +66,8 @@ const HomePage = () => {
       if (key !== 'Enter') return;
 
       e.preventDefault();
-      setGuessedLetters([]);
-      // setWordToGuess(getWord());
-      setWordToGuess('MASIK');
+
+      store.dispatch(setWordToGuess());
     };
 
     document.addEventListener('keypress', handler);
@@ -76,7 +79,7 @@ const HomePage = () => {
 
   return (
     <>
-      {!isPlaying ? (
+      {!gameInProgress ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h4">Hangman Game</Typography>
           <Typography variant="body1">Choose a difficulty level</Typography>
@@ -114,7 +117,7 @@ const HomePage = () => {
               disabled={isWinner || isLoser}
               activeLetters={guessedLetters.filter((letter) => wordToGuess.includes(letter))}
               inactiveLetters={incorrectLetters}
-              addGuessedLetter={addguessedLetter}
+              addGuessedLetter={addLetter}
             />
           </div>
         </div>
