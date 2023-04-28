@@ -1,13 +1,18 @@
-import React from "react";
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+import { selectGuessedLetters, selectWordToGuess } from '../../store/game';
 
 type HangmanWordProps = {
-  guessedLetters: string[];
-  wordToGuess: string;
   reveal?: boolean;
 };
 
-const HangmanWord = ({ guessedLetters, wordToGuess, reveal = false }: HangmanWordProps) => {
-    console.log(wordToGuess)
+const HangmanWord = ({ reveal = false }: HangmanWordProps) => {
+  const guessedLetters = useSelector(selectGuessedLetters);
+  const wordToGuess = useSelector(selectWordToGuess);
+
+  console.log(wordToGuess);
+
   return (
     <div
       style={{
