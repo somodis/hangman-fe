@@ -1,9 +1,15 @@
 import React from 'react';
-
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import LoginForm from '../components/login-form/LoginForm';
 
 const LoginPage = () => {
-  return <Typography variant="h4">Login</Typography>;
+  return (
+    <>
+      <Box sx={{ margin: '2rem' }}>
+        <LoginForm />
+      </Box>
+    </>
+  );
 };
 
 export default LoginPage;
