@@ -7,6 +7,8 @@ const processEnv = {
 
 export const Env = {
   QUERY_FORMAT: { arrayFormat: 'bracket' } as StringifyOptions,
+  API_TOKEN_KEY: 'API_TOKEN',
+  API_REFRESH_TOKEN_KEY: 'REFRESH_TOKEN',
   ...processEnv,
 };
 

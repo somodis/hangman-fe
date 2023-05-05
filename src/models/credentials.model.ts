@@ -3,6 +3,11 @@ export interface LoginCredentials {
   password: string;
 }
 
-export interface TokenResponse {
-  token: string;
+export interface TokenType {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface LoginResponse {
+  token: TokenType;
 }

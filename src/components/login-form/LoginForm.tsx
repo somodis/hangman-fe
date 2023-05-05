@@ -2,25 +2,34 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { LoginCredentials } from '../../models/credentials.model';
 import { authService } from '../../services';
-import { useNavigate } from 'react-router-dom';
+import { login } from '../../store/auth';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (values: LoginCredentials) => {
     try {
       setIsLoading(true);
       setError('');
 
-      const { token } = await authService.login(values);
+      // try {
+      //   await dispatch(login({ values }));
+      // } catch (e) {
+      //   console.log(e)
+      // }
 
-      localStorage.setItem('token', token);
-      navigate(0);
+      // const { token } = await authService.login(values);
+
+      // localStorage.setItem('token', token);
+      // navigate(0);
 
     } catch (e) {
       setError('Invalid email or password!');

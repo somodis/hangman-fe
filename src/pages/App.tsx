@@ -1,19 +1,18 @@
 import React, { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { filterRoutes } from '../utils/auth';
 import { routes } from '../config/routes';
-import { Role } from '../config/roles';
-import { AuthRoute } from '../components/auth/AuthRoute';
-import { NotFound } from '../components/not-found/NotFound';
+import { selectUserRoles } from '../store/profile';
 
+import { AuthRoute } from '../components/auth/AuthRoute';
 import LoginPage from './LoginPage';
 import { PrivateLayout } from './PrivateLayout';
 
 const App: FC = () => {
-  // const isLoggedIn = useSelector(selectIsLoggedIn);
-  // const role = useSelector(selectUserRoles);
-  const role = Role.ADMIN;
+  const role = useSelector(selectUserRoles);
+  // const role = Role.ADMIN;
 
   const authenticatedRoutes = filterRoutes(routes, role);
   const defaultRoute = authenticatedRoutes?.length ? authenticatedRoutes[0].path || '/' : '/';

@@ -2,10 +2,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { profileReducer } from './profile';
 import { gameReducer } from './game';
+import { authReducer } from './auth';
 
 export const rootReducer = combineReducers({
   game: gameReducer,
   profile: profileReducer,
+  auth: authReducer
 });
 
 const store = configureStore({
