@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 
 import Keyboard from '../keyboard/Keyboard';
 import HangmanWord from './HangmanWord';
+import HangmanDrawing from './HangmanDrawing';
 
 import { selectGuessedLetters, selectMistakeCount, selectWordToGuess } from '../../store/game';
 import { Button } from '@mui/material';
 
 const Hangman = () => {
+  console.log('hangman');
   const wordToGuess = useSelector(selectWordToGuess);
   const guessedLetters = useSelector(selectGuessedLetters);
   const mistakeCount = useSelector(selectMistakeCount);
@@ -20,7 +22,7 @@ const Hangman = () => {
       {isWinner && "You've Won! - Refresh to try again"}
       {isLoser && 'Nice Try - Refresh to try again'}
 
-      <Hangman />
+      <HangmanDrawing />
       <HangmanWord reveal={isLoser} />
       <Keyboard />
       <h4>Mistake counter: {mistakeCount}</h4>

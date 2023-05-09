@@ -8,8 +8,9 @@ import { selectGameState } from '../store/game';
 
 const HomePage = () => {
   const gameInProgress = useSelector(selectGameState);
+
   useEffect(() => {
-    console.log('useeff');
+    console.log('useeff, gameInProgress', gameInProgress);
   }, [gameInProgress]);
 
   return !gameInProgress ? <DifficultySelector /> : <Hangman />;

@@ -1,16 +1,22 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { filterRoutes } from '../utils/auth';
 import { routes } from '../config/routes';
-import { selectUserRoles } from '../store/profile';
+import { getProfile, selectUserRoles } from '../store/profile';
+import { initToken } from '../store/auth';
 
 import { AuthRoute } from '../components/auth/AuthRoute';
 import LoginPage from './LoginPage';
 import { PrivateLayout } from './PrivateLayout';
+import ScoreboardPage from './ScoreboardPage';
+import { selectIsLoggedIn } from '../store/auth';
 
 const App: FC = () => {
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const role = useSelector(selectUserRoles);
   // const role = Role.ADMIN;
 
@@ -24,6 +30,14 @@ const App: FC = () => {
         element={
           <AuthRoute>
             <LoginPage />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="scores"
+        element={
+          <AuthRoute>
+            <ScoreboardPage />
           </AuthRoute>
         }
       />

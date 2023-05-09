@@ -10,7 +10,7 @@ interface AuthRouteProps {
 }
 
 export function AuthRoute({ children }: AuthRouteProps) {
-    const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   // const isLoggedIn = false;
   const location = useLocation();
 

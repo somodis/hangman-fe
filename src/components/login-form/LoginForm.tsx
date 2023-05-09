@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { LoginCredentials } from '../../models/credentials.model';
+import { LoginCredentials, TokenType } from '../../models/credentials.model';
 import { authService } from '../../services';
 import { login } from '../../store/auth';
 
@@ -13,24 +13,25 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
-  const handleSubmit = async (values: LoginCredentials) => {
+  const handleSubmit = async (credentials: LoginCredentials) => {
     try {
       setIsLoading(true);
       setError('');
 
-      // try {
-      //   await dispatch(login({ values }));
-      // } catch (e) {
-      //   console.log(e)
-      // }
+      try {
+        await dispatch(login({ credentials }));
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsLoading(false);
+      }
 
-      // const { token } = await authService.login(values);
+      // const { token } = await authService.login(credentials);
 
       // localStorage.setItem('token', token);
       // navigate(0);
-
     } catch (e) {
       setError('Invalid email or password!');
       setIsLoading(false);

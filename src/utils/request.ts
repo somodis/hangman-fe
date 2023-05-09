@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import { toast } from 'react-toastify';
 
 import { stringify } from '../utils/query';
+import { Env } from '../config/env';
 
 export enum Methods {
   GET = 'GET',
@@ -56,7 +57,7 @@ axios.interceptors.response.use(
 );
 
 axios.interceptors.request.use((requestConfig: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem(Env.API_TOKEN_KEY);
   console.log('axios.interceptors.request token', token);
 
   if (token) {

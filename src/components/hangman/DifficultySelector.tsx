@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Button, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 
@@ -10,7 +10,7 @@ const DifficultySelector = () => {
   const selectedDifficulty = useSelector(selectDifficultyLevel);
 
   const selectDifficulty = (event: React.MouseEvent<HTMLElement>, newValue: DifficultyLevel | null) => {
-    console.log('setdiff func');
+    console.log('setdiff func', newValue);
     store.dispatch(setDifficulty(newValue));
   };
 
@@ -18,6 +18,10 @@ const DifficultySelector = () => {
     console.log('startgame func');
     store.dispatch(setGame());
   };
+
+  useEffect(() => {
+    console.log('selectedDifficulty changed', selectedDifficulty);
+  }, [selectedDifficulty]);
 
   return (
     <div>
