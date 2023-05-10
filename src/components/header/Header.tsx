@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 
 import IconButton from '@mui/material/IconButton';
@@ -6,11 +6,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { Theme } from '@mui/material/styles';
 import ExitToAppIcon from '@mui/icons-material/PowerSettingsNew';
-import MenuIcon from '@mui/icons-material/Menu';
 import { Tooltip } from '@mui/material';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const Header: FC = () => {
   const dispatch = useDispatch();

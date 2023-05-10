@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { authService } from '../services';
-import { LoginCredentials, UserModel } from '../models';
+import { LoginCredentials } from '../models';
 import { Env } from '../config/env';
 import { getProfile, clearProfile } from './profile';
 
@@ -20,14 +20,12 @@ export const setTokenInStorage = (token?: string | null, refreshToken?: string) 
 export interface AuthState {
   loading: boolean;
   token: string | null;
-  user: UserModel | null;
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     token: null,
-    user: null,
     error: null,
     loading: false,
   } as AuthState,

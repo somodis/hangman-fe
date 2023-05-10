@@ -15,7 +15,7 @@ const Hangman = () => {
   const mistakeCount = useSelector(selectMistakeCount);
 
   const isLoser = mistakeCount === 6;
-  const isWinner = wordToGuess.split('').every((letter) => guessedLetters.includes(letter));
+  const isWinner = wordToGuess?.word.split('').every((letter) => guessedLetters.includes(letter));
 
   return (
     <div>

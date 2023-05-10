@@ -20,20 +20,12 @@ const LoginForm = () => {
       setIsLoading(true);
       setError('');
 
-      try {
-        await dispatch(login({ credentials }));
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoading(false);
-      }
-
-      // const { token } = await authService.login(credentials);
-
-      // localStorage.setItem('token', token);
-      // navigate(0);
+      await dispatch(login({ credentials }));
     } catch (e) {
+      console.log(e);
       setError('Invalid email or password!');
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };

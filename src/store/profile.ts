@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { userService } from '../services';
 import { UserModel } from '../models';
+import store from '.';
 
 export interface ProfileState {
   loading: boolean;
@@ -42,6 +43,18 @@ export const getProfile = () => async (dispatch: AppDispatch) => {
   dispatch(actions.setProfile(profile || null));
 
   return profile;
+};
+
+export const setUserInGame = (isInGame: boolean) => async (dispatch: AppDispatch) => {
+  const user = store.getState().profile.profile;
+
+  if (!user) {
+    return;
+  }
+
+  // todo api req: start game
+
+  dispatch(actions.setProfile({ ...user, isInGame }));
 };
 
 export const selectProfile = (state: ApplicationState) => {

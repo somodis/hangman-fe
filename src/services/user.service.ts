@@ -1,9 +1,9 @@
-import { Role } from '../config/roles';
 import { UserModel } from '../models/user.model';
 import request, { Methods } from '../utils/request';
 
 class UserService {
   private resource = 'users';
+
   async getProfile() {
     console.log('getProfile');
     const user = await request<UserModel>({
@@ -11,10 +11,19 @@ class UserService {
       resource: `${this.resource}/me`,
     });
 
-    // temp
-    user.role = Role.ADMIN;
-
     return user;
+  }
+
+  async getUserScoreboard() {
+    return request<UserModel[]>({ resource: `${this.resource}/scoreboard`, method: Methods.GET });
+  }
+
+  async saveUserScore(userId: number, score: number) {
+    return request<UserModel>({
+      resource: `${this.resource}/${userId}`,
+      data: { id: userId, score: score, isInGame: false },
+      method: Methods.PATCH,
+    });
   }
 }
 

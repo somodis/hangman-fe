@@ -11,8 +11,6 @@ const HangmanWord = ({ reveal = false }: HangmanWordProps) => {
   const guessedLetters = useSelector(selectGuessedLetters);
   const wordToGuess = useSelector(selectWordToGuess);
 
-  console.log(wordToGuess);
-
   return (
     <div
       style={{
@@ -25,7 +23,7 @@ const HangmanWord = ({ reveal = false }: HangmanWordProps) => {
         fontFamily: 'monospace',
       }}
     >
-      {wordToGuess.split('').map((letter, index) => (
+      {wordToGuess?.word.split('').map((letter, index) => (
         <span style={{ borderBottom: '.1em solid black' }} key={index}>
           <span
             style={{

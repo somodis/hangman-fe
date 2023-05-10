@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Keyboard.module.scss';
 import alphabet from '../../assets/alphabet.json';
 
 import store from '../../store';
-import { addGuessedLetter, selectGuessedLetters, setWordToGuess } from '../../store/game';
+import { guess, selectGuessedLetters } from '../../store/game';
+import { getWord } from '../../utils/words';
 
 const Keyboard = () => {
   const guessedLetters = useSelector(selectGuessedLetters);
+  const dispatch = useDispatch<any>();
 
-  const addLetter = (letter: string) => {
-    store.dispatch(addGuessedLetter(letter));
+  const addLetter = async (letter: string) => {
+    await dispatch(guess({ letter }));
   };
 
   useEffect(() => {
-    const keyPressHandler = (e: KeyboardEvent) => {
+    const keyPressHandler = async (e: KeyboardEvent) => {
       const key = e.key;
 
       if (!key.match(/^[a-z]$/) && key !== 'Enter') return;
@@ -23,7 +25,7 @@ const Keyboard = () => {
       e.preventDefault();
 
       if (key === 'Enter') {
-        store.dispatch(setWordToGuess());
+        await dispatch(getWord());
       } else {
         addLetter(key.toUpperCase());
       }
@@ -49,7 +51,7 @@ const Keyboard = () => {
         const isInactive = guessedLetters.includes(key);
         return (
           <button
-            onClick={() => addGuessedLetter(key)}
+            onClick={() => addLetter(key)}
             className={`${styles.btn} ${isInactive ? styles.inactive : ''}`}
             disabled={isInactive}
             key={key}
