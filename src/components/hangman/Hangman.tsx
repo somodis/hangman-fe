@@ -1,33 +1,46 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from '@mui/material';
 
 import Keyboard from '../keyboard/Keyboard';
 import HangmanWord from './HangmanWord';
 import HangmanDrawing from './HangmanDrawing';
 
-import { selectGuessedLetters, selectMistakeCount, selectWordToGuess } from '../../store/game';
-import { Button } from '@mui/material';
+import { endGame, selectLoss, selectMistakeCount, selectWin } from '../../store/game';
+
+const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser: boolean | undefined }) => {
+  useEffect(() => {
+    console.log('asd');
+  }, [isWinner, isLoser]);
+
+  return (
+    <>
+      <h1>{isWinner == true && "You've Won! - Refresh to try again"}</h1>
+
+      <h1>{isLoser == true && 'Nice Try - Refresh to try again'}</h1>
+    </>
+  );
+};
 
 const Hangman = () => {
-  console.log('hangman');
-  const wordToGuess = useSelector(selectWordToGuess);
-  const guessedLetters = useSelector(selectGuessedLetters);
   const mistakeCount = useSelector(selectMistakeCount);
+  const isWinner = useSelector(selectWin);
+  const isLoser = useSelector(selectLoss);
+  const dispatch = useDispatch<any>();
 
-  const isLoser = mistakeCount === 6;
-  const isWinner = wordToGuess?.word.split('').every((letter) => guessedLetters.includes(letter));
+  const handleClick = (type?: 'new' | undefined) => {
+    dispatch(endGame(isWinner, type));
+  };
 
   return (
     <div>
-      {isWinner && "You've Won! - Refresh to try again"}
-      {isLoser && 'Nice Try - Refresh to try again'}
-
+      <Result isWinner={isWinner} isLoser={isLoser} />
       <HangmanDrawing />
-      <HangmanWord reveal={isLoser} />
+      <HangmanWord reveal={false} />
       <Keyboard />
       <h4>Mistake counter: {mistakeCount}</h4>
-      <Button>End Game</Button>
-      <Button>New Game</Button>
+      <Button onClick={() => handleClick()}>End Game</Button>
+      <Button onClick={() => handleClick('new')}>Start New Game</Button>
     </div>
   );
 };

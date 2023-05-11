@@ -3,12 +3,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { profileReducer } from './profile';
 import { gameReducer } from './game';
 import { authReducer } from './auth';
+import { scoreReducer } from './scores';
 
 const store = configureStore({
   reducer: {
     game: gameReducer,
     profile: profileReducer,
     auth: authReducer,
+    scores: scoreReducer,
   },
 });
 

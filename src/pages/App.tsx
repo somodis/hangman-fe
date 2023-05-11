@@ -1,24 +1,37 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { filterRoutes } from '../utils/auth';
 import { routes } from '../config/routes';
 import { getProfile, selectUserRoles } from '../store/profile';
-import { initToken } from '../store/auth';
 
 import { AuthRoute } from '../components/auth/AuthRoute';
 import LoginPage from './LoginPage';
 import { PrivateLayout } from './PrivateLayout';
-import ScoreboardPage from './ScoreboardPage';
-import { selectIsLoggedIn } from '../store/auth';
+import { initToken, selectIsLoggedIn } from '../store/auth';
 
 const App: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
-  const isLoggedIn = useSelector(selectIsLoggedIn);
   const role = useSelector(selectUserRoles);
-  // const role = Role.ADMIN;
+
+  // const initProfile = useCallback(async () => {
+  //   try {
+  //     // setProfileLoading(true);
+
+  //     // await dispatch(initToken());
+  //     // await dispatch(getProfile());
+
+  //   } finally {
+  //     // setProfileLoading(false);
+  //   }
+  // }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(initToken());
+    dispatch(getProfile());
+  }, [dispatch]);
 
   const authenticatedRoutes = filterRoutes(routes, role);
   const defaultRoute = authenticatedRoutes?.length ? authenticatedRoutes[0].path || '/' : '/';
@@ -30,14 +43,6 @@ const App: FC = () => {
         element={
           <AuthRoute>
             <LoginPage />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="scores"
-        element={
-          <AuthRoute>
-            <ScoreboardPage />
           </AuthRoute>
         }
       />

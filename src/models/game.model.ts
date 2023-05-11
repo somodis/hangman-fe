@@ -22,3 +22,8 @@ export interface AutoSaveGameModel {
   wordId?: number;
   userId?: number;
 }
+
+export interface WinOrLossModel {
+  isWinner: boolean | undefined;
+  isLoser: boolean | undefined;
+}

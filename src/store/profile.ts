@@ -52,8 +52,6 @@ export const setUserInGame = (isInGame: boolean) => async (dispatch: AppDispatch
     return;
   }
 
-  // todo api req: start game
-
   dispatch(actions.setProfile({ ...user, isInGame }));
 };
 
