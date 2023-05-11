@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
@@ -8,14 +9,12 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import ExitToAppIcon from '@mui/icons-material/PowerSettingsNew';
 import { Tooltip } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+
+import { selectProfile } from '../../store/profile';
+import { routes } from '../../config/routes';
 
 export const Header: FC = () => {
-  const dispatch = useDispatch();
-
-  //   const profile = useSelector(selectProfile);
-
-  //   const largeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up(theme.breakpoints.values.mobileBreakpoint));
+  const profile = useSelector(selectProfile);
 
   return (
     <>
@@ -25,15 +24,16 @@ export const Header: FC = () => {
             <Typography variant="h6">Logo</Typography>
 
             <Box display="flex" alignItems="center">
-              <NavLink to="/admin">
-                <Typography variant="h6">Admin</Typography>
-              </NavLink>
-              <NavLink to="/scores">
-                <Typography variant="h6">Scores</Typography>
-              </NavLink>
-              <NavLink to="/home">
-                <Typography variant="h6">Home</Typography>
-              </NavLink>
+              {routes.map(
+                (route) =>
+                  profile &&
+                  route.allowedFor?.includes(profile.role) && (
+                    <NavLink key={route.title()} to={route.link || ''}>
+                      <Typography variant="h6">{route.title()}</Typography>
+                    </NavLink>
+                  )
+              )}
+
               <Tooltip title="Logout">
                 <IconButton onClick={() => console.log('logout')} size="large">
                   <ExitToAppIcon color="primary" />

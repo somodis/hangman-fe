@@ -16,7 +16,7 @@ export const routes: RouteConfigurationModel[] = [
     path: 'home',
     link: '/home',
     component: <HomePage />,
-    title: () => 'HomePage',
+    title: () => 'Home',
   },
   {
     icon: ComponentsIcon,
@@ -32,6 +32,6 @@ export const routes: RouteConfigurationModel[] = [
     path: 'admin',
     link: '/admin',
     component: <AdminPage />,
-    title: () => 'Admin page',
+    title: () => 'Admin',
   },
 ];
