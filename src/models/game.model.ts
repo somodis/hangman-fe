@@ -1,3 +1,5 @@
+import { WordModel } from './words.model';
+
 export enum DifficultyLevel {
   EASY = 'easy',
   MEDIUM = 'medium',
@@ -15,7 +17,13 @@ export interface StartGameModel {
   wordId: number;
   userId: number;
 }
-
+export interface ResponseGameModel {
+  id: number;
+  guessedLetters: string;
+  word: WordModel;
+  wordId: number;
+  userId: number;
+}
 export interface AutoSaveGameModel {
   id: number;
   guessedLetters: string[];

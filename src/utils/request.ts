@@ -41,7 +41,14 @@ axios.interceptors.response.use(
   async (response) => response,
   async (error: AxiosError) => {
     console.warn(error.message);
-    toast.error(error.message);
+
+    const resData = error.response?.data;
+
+    if (typeof resData === 'object' && resData !== null && 'message' in resData) {
+      toast.error(resData.message as string);
+    } else {
+      toast.error(error.message);
+    }
 
     if (error.response && error.config) {
       const { status } = error.response;

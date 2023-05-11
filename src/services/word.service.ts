@@ -13,7 +13,7 @@ class WordService {
     return request<WordModel>({ resource: `${this.resource}/random/${level}`, method: Methods.GET });
   }
 
-  async addWord(data: string) {
+  async addWord(data: { word: string }) {
     return request<addWordResponse>({ resource: `${this.resource}`, data, method: Methods.POST });
   }
 }

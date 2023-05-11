@@ -1,9 +1,9 @@
 import React from 'react';
 
-import words from '../../assets/words.json';
+import { WordModel } from '../../models';
 
-const WordList = () => {
-  return <div>{words.map((word) => word + ' ')}</div>;
+const WordList = ({ words }: { words: WordModel[] }) => {
+  return <div>{words.map(({ word }) => word + ' ')}</div>;
 };
 
 export default WordList;

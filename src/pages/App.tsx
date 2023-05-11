@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,28 +9,29 @@ import { getProfile, selectUserRoles } from '../store/profile';
 import { AuthRoute } from '../components/auth/AuthRoute';
 import LoginPage from './LoginPage';
 import { PrivateLayout } from './PrivateLayout';
-import { initToken, selectIsLoggedIn } from '../store/auth';
+import { initToken } from '../store/auth';
+import { initGame } from '../store/game';
 
 const App: FC = () => {
   const dispatch = useDispatch<any>();
 
   const role = useSelector(selectUserRoles);
 
-  // const initProfile = useCallback(async () => {
-  //   try {
-  //     // setProfileLoading(true);
+  const initApp = useCallback(async () => {
+    try {
+      // todo loading?
 
-  //     // await dispatch(initToken());
-  //     // await dispatch(getProfile());
+      await dispatch(initToken());
+      await dispatch(getProfile());
+      await dispatch(initGame());
 
-  //   } finally {
-  //     // setProfileLoading(false);
-  //   }
-  // }, [dispatch]);
+    } finally {
+      // todo loading false
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(initToken());
-    dispatch(getProfile());
+    initApp();
   }, [dispatch]);
 
   const authenticatedRoutes = filterRoutes(routes, role);

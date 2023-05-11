@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { DifficultyLevel, WinOrLossModel } from '../models/game.model';
+import { DifficultyLevel, GameModel, ResponseGameModel, WinOrLossModel } from '../models/game.model';
 import { gameService, userService, wordService } from '../services';
 import { setUserInGame } from './profile';
 import store from '.';
@@ -50,6 +50,16 @@ const gameSlice = createSlice({
       state.isLoser = action.payload.isLoser;
     },
     resetGame: () => initialState,
+    resumeGame: (state, action: PayloadAction<ResponseGameModel>) => {
+      const fetchedGame = action.payload;
+      state.gameId = fetchedGame.id;
+      state.gameInProgress = true;
+      state.selectedDifficulty = DifficultyLevel.EASY; // TODO !!
+      state.wordToGuess = fetchedGame.word;
+      const guessedLetterArray = fetchedGame.guessedLetters.split(',');
+      state.guessedLetters = guessedLetterArray;
+      state.mistakes = 0; // TODO !!
+    },
     addGuessedLetter: (state, action: PayloadAction<string>) => {
       const letter = action.payload;
       if (state.guessedLetters.includes(letter)) {
@@ -92,6 +102,18 @@ export const setGame = () => async (dispatch: AppDispatch) => {
   await dispatch(setUserInGame(true));
   dispatch(actions.setGameInProgress(true));
   dispatch(actions.setGameId(game.id));
+};
+
+export const initGame = () => async (dispatch: AppDispatch) => {
+  const user = store.getState().profile.profile;
+
+  if (!user || !user.isInGame) {
+    return;
+  }
+
+  const game = await gameService.getGame(user.id);
+
+  dispatch(actions.resumeGame(game));
 };
 
 export const guess =
