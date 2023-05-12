@@ -9,7 +9,6 @@ class WordService {
   }
 
   async getRandomWord(level: DifficultyLevel) {
-    console.log('getRandomWord', level);
     return request<WordModel>({ resource: `${this.resource}/random/${level}`, method: Methods.GET });
   }
 

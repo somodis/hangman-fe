@@ -65,7 +65,6 @@ axios.interceptors.response.use(
 
 axios.interceptors.request.use((requestConfig: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem(Env.API_TOKEN_KEY);
-  console.log('axios.interceptors.request token', token);
 
   if (token) {
     requestConfig.headers.Authorization = `Bearer ${token}`;

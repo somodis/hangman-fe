@@ -10,20 +10,14 @@ const DifficultySelector = () => {
   const selectedDifficulty = useSelector(selectDifficultyLevel);
 
   const selectDifficulty = async (event: React.MouseEvent<HTMLElement>, newValue: DifficultyLevel) => {
-    console.log('setdiff func', newValue);
     store.dispatch(setDifficulty(newValue));
 
     store.dispatch(getWord({ level: newValue }));
   };
 
   const startGame = () => {
-    console.log('startgame func');
     store.dispatch(setGame());
   };
-
-  useEffect(() => {
-    console.log('selectedDifficulty changed', selectedDifficulty);
-  }, [selectedDifficulty]);
 
   return (
     <div>

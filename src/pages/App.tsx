@@ -24,7 +24,6 @@ const App: FC = () => {
       await dispatch(initToken());
       await dispatch(getProfile());
       await dispatch(initGame());
-
     } finally {
       // todo loading false
     }

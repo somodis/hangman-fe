@@ -4,6 +4,7 @@ import { gameService, userService, wordService } from '../services';
 import { setUserInGame } from './profile';
 import store from '.';
 import { WordModel } from '../models';
+import { checkIfLost, checkIfWon } from '../utils/check-win-or-loss';
 
 export interface GameState {
   gameId: number | null;
@@ -36,7 +37,7 @@ const gameSlice = createSlice({
     setGameInProgress: (state, action: PayloadAction<boolean>) => {
       state.gameInProgress = action.payload;
     },
-    setGameIsLoading: (state, action: PayloadAction<boolean>) => {
+    setIsGameLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
     setGameId: (state, action: PayloadAction<number>) => {
@@ -70,6 +71,8 @@ const gameSlice = createSlice({
       state.wordToGuess = fetchedGame.word;
       state.gameInProgress = true;
       state.mistakes = fetchedGame.mistakes;
+      state.isWinner = checkIfWon(fetchedGame.word.word, guessedLetterArray);
+      state.isLoser = checkIfLost(fetchedGame.mistakes);
     },
     addGuessedLetter: (state, action: PayloadAction<string>) => {
       const letter = action.payload;
@@ -109,9 +112,9 @@ export const setGame = () => async (dispatch: AppDispatch) => {
     return;
   }
 
-  await dispatch(actions.setGameIsLoading(true));
+  await dispatch(actions.setIsGameLoading(true));
   const game = await gameService.startGame({ userId: user.id, wordId: word.id });
-  await dispatch(actions.setGameIsLoading(false));
+  await dispatch(actions.setIsGameLoading(false));
 
   await dispatch(setUserInGame(true));
   dispatch(actions.setGameInProgress(true));
@@ -126,42 +129,36 @@ export const initGame = () => async (dispatch: AppDispatch) => {
   }
 
   const game = await gameService.getGame(user.id);
-  console.log('resumegame', game);
   await dispatch(actions.resumeGame(game));
 };
 
 export const guess =
   ({ letter }: { letter: string }) =>
   async (dispatch: AppDispatch) => {
-    if (store.getState().game.isWinner || store.getState().game.isLoser) {
-      return;
-    }
-    dispatch(addGuessedLetter(letter));
 
-    const { gameId, guessedLetters } = store.getState().game;
+    const { gameId, wordToGuess } = store.getState().game;
     const user = store.getState().profile.profile;
-    if (!gameId || !user) {
+    
+    await dispatch(addGuessedLetter(letter));
+    
+    const { mistakes, guessedLetters } = store.getState().game;
+
+    if (!gameId || !user || !wordToGuess) {
       return;
     }
-    const mistakeCount = store.getState().game.mistakes;
 
     await gameService.autoSaveGame({
       id: gameId,
       userId: user.id,
       guessedLetters: guessedLetters,
       isInProgress: true,
-      mistakes: mistakeCount,
+      mistakes: mistakes,
     });
 
-    const isLoser = mistakeCount === 6;
-    const isWinner = store
-      .getState()
-      .game.wordToGuess?.word.split('')
-      .every((letter) => selectGuessedLetters(store.getState()).includes(letter));
-
-    if (isLoser || isWinner) {
-      dispatch(actions.setWinOrLoss({ isWinner, isLoser }));
-    }
+    console.log({ isWinner: checkIfWon(wordToGuess?.word, guessedLetters), isLoser: checkIfLost(mistakes) })
+    dispatch(
+      actions.setWinOrLoss({ isWinner: checkIfWon(wordToGuess?.word, guessedLetters), isLoser: checkIfLost(mistakes) })
+    );
   };
 
 export const endGame = (type?: 'new' | 'end') => async (dispatch: AppDispatch) => {
@@ -219,6 +216,6 @@ export const selectWin = (state: ApplicationState) => {
 export const selectLoss = (state: ApplicationState) => {
   return state.game.isLoser;
 };
-export const selectGameIsLoading = (state: ApplicationState) => {
+export const selectIsGameLoading = (state: ApplicationState) => {
   return state.game.isLoading;
 };

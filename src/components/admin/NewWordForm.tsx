@@ -37,7 +37,6 @@ const NewWordForm = ({ words }: { words: WordModel[] }) => {
       setIsLoading(true);
       setError('');
       const res = await wordService.addWord({ word });
-      console.log(res);
     } catch (e) {
       setError('Invalid word');
       setIsLoading(false);
@@ -49,9 +48,8 @@ const NewWordForm = ({ words }: { words: WordModel[] }) => {
 
   return (
     <div>
-      <Typography>Type the word you want to add to the list</Typography>
-
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} style={{ display: 'grid', rowGap: '1rem' }}>
+        <Typography variant="body2">Type the word you want to add to the list</Typography>
         <TextField
           id="new-word-field"
           value={formik.values.word}

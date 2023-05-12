@@ -9,10 +9,10 @@ export function PrivateLayout() {
   return (
     <PrivateRoute>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ minHeight: '100vh' }}>
         <Header />
 
-        <Container maxWidth="md" style={{ border: '1px solid red' }}>
+        <Container maxWidth="md" sx={{ padding: '2rem', backgroundColor: '#fefefe' }}>
           <Outlet />
         </Container>
       </Container>

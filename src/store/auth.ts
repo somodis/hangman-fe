@@ -7,7 +7,6 @@ import { getProfile, clearProfile } from './profile';
 import { initGame, resetGame } from './game';
 
 export const setTokenInStorage = (token?: string | null, refreshToken?: string) => {
-  console.log('settokeninstorage');
   if (token) {
     localStorage.setItem(Env.API_TOKEN_KEY, token);
   } else if (refreshToken) {
@@ -32,12 +31,10 @@ const authSlice = createSlice({
   } as AuthState,
   reducers: {
     setToken: (state, action: PayloadAction<string | null>) => {
-      console.log('setToken auth.ts');
       state.token = action.payload;
       setTokenInStorage(action.payload);
     },
     initToken(state) {
-      console.log('initToken auth.ts');
       state.token = localStorage.getItem(Env.API_TOKEN_KEY);
     },
   },
@@ -53,7 +50,6 @@ export const initToken = () => async (dispatch: AppDispatch) => {
 
 export const logout = () => async (dispatch: AppDispatch) => {
   try {
-    console.log('todo logout');
     await localStorage.removeItem(Env.API_TOKEN_KEY);
     // await authService.logout(localStorage.getItem(Env.API_REFRESH_TOKEN_KEY));
     // await authService.logout();
@@ -67,14 +63,11 @@ export const logout = () => async (dispatch: AppDispatch) => {
 export const login =
   ({ credentials }: { credentials: LoginCredentials }) =>
   async (dispatch: AppDispatch) => {
-    console.log('login auth.ts');
     const { token } = await authService.login(credentials);
 
     dispatch(actions.setToken(token?.accessToken || null));
-    console.log('login auth.ts, set token');
 
     setTokenInStorage(token.accessToken, token.refreshToken);
-    console.log('login auth.ts');
 
     await dispatch(getProfile());
     await dispatch(initGame());

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { wordService } from '../services';
 import { WordModel } from '../models';
@@ -21,11 +21,15 @@ const AdminPage = () => {
   }, []);
 
   return (
-    <>
-      <Typography variant="h4">Admin</Typography>
-      <NewWordForm words={words} />
-      <WordList words={words} />
-    </>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <Typography sx={{ alignSelf: 'center' }} variant="h4">
+        Admin
+      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+        <NewWordForm words={words} />
+        <WordList words={words} />
+      </Box>
+    </Box>
   );
 };
 

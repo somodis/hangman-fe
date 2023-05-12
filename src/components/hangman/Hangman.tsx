@@ -17,6 +17,8 @@ const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser:
   );
 };
 
+const MAX_MISTAKES = 6;
+
 const Hangman = () => {
   const dispatch = useDispatch<any>();
 
@@ -36,7 +38,7 @@ const Hangman = () => {
         <HangmanWord reveal={isLoser} />
         <Keyboard />
         <Typography variant="body2">
-          Remaining possibility of failure: <b>{mistakeCount}</b>
+          Remaining possibility of failure: <b>{MAX_MISTAKES - mistakeCount}</b>
         </Typography>
         <Button variant="outlined" onClick={() => handleClick()}>
           End Game

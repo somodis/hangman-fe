@@ -5,7 +5,6 @@ class UserService {
   private resource = 'users';
 
   async getProfile() {
-    console.log('getProfile');
     const user = await request<UserModel>({
       method: Methods.GET,
       resource: `${this.resource}/me`,
