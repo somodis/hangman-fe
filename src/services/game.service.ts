@@ -13,7 +13,7 @@ class GameService {
   }
 
   async endGame(data: AutoSaveGameModel) {
-    return request<GameModel>({ resource: `${this.resource}`, data, method: Methods.PATCH });
+    return request<GameModel>({ resource: `${this.resource}/${data.id}`, data, method: Methods.PATCH });
   }
 
   async autoSaveGame(data: AutoSaveGameModel) {

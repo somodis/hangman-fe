@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import IconButton from '@mui/material/IconButton';
@@ -12,9 +12,11 @@ import { Tooltip } from '@mui/material';
 
 import { selectProfile } from '../../store/profile';
 import { routes } from '../../config/routes';
+import { logout } from '../../store/auth';
 
 export const Header: FC = () => {
   const profile = useSelector(selectProfile);
+  const dispatch = useDispatch<any>();
 
   return (
     <>
@@ -35,7 +37,7 @@ export const Header: FC = () => {
               )}
 
               <Tooltip title="Logout">
-                <IconButton onClick={() => console.log('logout')} size="large">
+                <IconButton onClick={() => dispatch(logout())} size="large">
                   <ExitToAppIcon color="primary" />
                 </IconButton>
               </Tooltip>

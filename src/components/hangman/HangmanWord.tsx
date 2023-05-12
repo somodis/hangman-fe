@@ -26,6 +26,7 @@ const HangmanWord = ({ reveal = false }: HangmanWordProps) => {
       {wordToGuess?.word.split('').map((letter, index) => (
         <span style={{ borderBottom: '.1em solid black' }} key={index}>
           <span
+            key={index}
             style={{
               visibility: guessedLetters.includes(letter) || reveal ? 'visible' : 'hidden',
               color: !guessedLetters.includes(letter) && reveal ? 'red' : 'black',

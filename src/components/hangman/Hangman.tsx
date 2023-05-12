@@ -23,20 +23,21 @@ const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser:
 };
 
 const Hangman = () => {
+  const dispatch = useDispatch<any>();
+
   const mistakeCount = useSelector(selectMistakeCount);
   const isWinner = useSelector(selectWin);
   const isLoser = useSelector(selectLoss);
-  const dispatch = useDispatch<any>();
 
-  const handleClick = (type?: 'new' | undefined) => {
-    dispatch(endGame(isWinner, type));
+  const handleClick = async (type?: 'new' | undefined) => {
+    await dispatch(endGame(type));
   };
 
   return (
     <div>
       <Result isWinner={isWinner} isLoser={isLoser} />
       <HangmanDrawing />
-      <HangmanWord reveal={false} />
+      <HangmanWord reveal={isLoser} />
       <Keyboard />
       <h4>Mistake counter: {mistakeCount}</h4>
       <Button onClick={() => handleClick()}>End Game</Button>

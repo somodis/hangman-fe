@@ -19,6 +19,12 @@ const profileSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    setUserScore: (state, action: PayloadAction<number>) => {
+      if (!state.profile) {
+        return;
+      }
+      state.profile.score = action.payload;
+    },
     setProfile: (state, action: PayloadAction<UserModel | null>) => {
       state.profile = action.payload;
       state.loading = false;

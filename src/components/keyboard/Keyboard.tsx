@@ -27,7 +27,7 @@ const Keyboard = () => {
       if (key === 'Enter') {
         await dispatch(getWord());
       } else {
-        addLetter(key.toUpperCase());
+        addLetter(key.toLowerCase());
       }
     };
 
@@ -48,10 +48,10 @@ const Keyboard = () => {
       }}
     >
       {alphabet.map((key) => {
-        const isInactive = guessedLetters.includes(key);
+        const isInactive = guessedLetters.includes(key.toLowerCase());
         return (
           <button
-            onClick={() => addLetter(key)}
+            onClick={() => addLetter(key.toLowerCase())}
             className={`${styles.btn} ${isInactive ? styles.inactive : ''}`}
             disabled={isInactive}
             key={key}

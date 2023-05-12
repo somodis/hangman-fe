@@ -23,12 +23,16 @@ export interface ResponseGameModel {
   word: WordModel;
   wordId: number;
   userId: number;
+  isInProgress: boolean;
+  mistakes: number;
 }
 export interface AutoSaveGameModel {
   id: number;
   guessedLetters: string[];
   wordId?: number;
   userId?: number;
+  isInProgress: boolean;
+  mistakes: number;
 }
 
 export interface WinOrLossModel {

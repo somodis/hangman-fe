@@ -14,6 +14,7 @@ export interface GameState {
   mistakes: number;
   isWinner: boolean | undefined;
   isLoser: boolean | undefined;
+  isLoading: boolean;
 }
 
 const initialState = {
@@ -25,6 +26,7 @@ const initialState = {
   mistakes: 0,
   isWinner: false,
   isLoser: false,
+  isLoading: false,
 } as GameState;
 
 const gameSlice = createSlice({
@@ -34,6 +36,9 @@ const gameSlice = createSlice({
     setGameInProgress: (state, action: PayloadAction<boolean>) => {
       state.gameInProgress = action.payload;
     },
+    setGameIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
     setGameId: (state, action: PayloadAction<number>) => {
       state.gameId = action.payload;
     },
@@ -42,7 +47,7 @@ const gameSlice = createSlice({
     },
     setWordToGuess: (state, action: PayloadAction<WordModel>) => {
       state.guessedLetters = [];
-      const wordData = { ...action.payload, word: action.payload.word.toUpperCase() };
+      const wordData = { ...action.payload, word: action.payload.word.toLowerCase() };
       state.wordToGuess = wordData;
     },
     setWinOrLoss: (state, action: PayloadAction<WinOrLossModel>) => {
@@ -52,13 +57,19 @@ const gameSlice = createSlice({
     resetGame: () => initialState,
     resumeGame: (state, action: PayloadAction<ResponseGameModel>) => {
       const fetchedGame = action.payload;
+
+      if (!fetchedGame) {
+        return;
+      }
+
+      const guessedLetterArray = fetchedGame.guessedLetters?.split(',') || [];
+
       state.gameId = fetchedGame.id;
-      state.gameInProgress = true;
-      state.selectedDifficulty = DifficultyLevel.EASY; // TODO !!
-      state.wordToGuess = fetchedGame.word;
-      const guessedLetterArray = fetchedGame.guessedLetters.split(',');
+      state.selectedDifficulty = fetchedGame.word?.difficulty;
       state.guessedLetters = guessedLetterArray;
-      state.mistakes = 0; // TODO !!
+      state.wordToGuess = fetchedGame.word;
+      state.gameInProgress = true;
+      state.mistakes = fetchedGame.mistakes;
     },
     addGuessedLetter: (state, action: PayloadAction<string>) => {
       const letter = action.payload;
@@ -74,6 +85,7 @@ const gameSlice = createSlice({
 });
 
 const { actions } = gameSlice;
+export const { resetGame } = actions;
 
 export const gameReducer = gameSlice.reducer;
 
@@ -97,7 +109,9 @@ export const setGame = () => async (dispatch: AppDispatch) => {
     return;
   }
 
+  await dispatch(actions.setGameIsLoading(true));
   const game = await gameService.startGame({ userId: user.id, wordId: word.id });
+  await dispatch(actions.setGameIsLoading(false));
 
   await dispatch(setUserInGame(true));
   dispatch(actions.setGameInProgress(true));
@@ -112,8 +126,8 @@ export const initGame = () => async (dispatch: AppDispatch) => {
   }
 
   const game = await gameService.getGame(user.id);
-
-  dispatch(actions.resumeGame(game));
+  console.log('resumegame', game);
+  await dispatch(actions.resumeGame(game));
 };
 
 export const guess =
@@ -129,9 +143,17 @@ export const guess =
     if (!gameId || !user) {
       return;
     }
-    await gameService.autoSaveGame({ id: gameId, userId: user.id, guessedLetters: guessedLetters });
+    const mistakeCount = store.getState().game.mistakes;
 
-    const isLoser = store.getState().game.mistakes === 6;
+    await gameService.autoSaveGame({
+      id: gameId,
+      userId: user.id,
+      guessedLetters: guessedLetters,
+      isInProgress: true,
+      mistakes: mistakeCount,
+    });
+
+    const isLoser = mistakeCount === 6;
     const isWinner = store
       .getState()
       .game.wordToGuess?.word.split('')
@@ -142,21 +164,26 @@ export const guess =
     }
   };
 
-export const endGame = (isWinner: boolean | undefined, type?: 'new' | 'end') => async (dispatch: AppDispatch) => {
+export const endGame = (type?: 'new' | 'end') => async (dispatch: AppDispatch) => {
   const user = store.getState().profile.profile;
+  const game = store.getState().game;
 
-  if (!user) {
+  if (!user || !game.gameId) {
     return;
   }
 
-  if (isWinner) {
+  if (game.isWinner) {
     await userService.saveUserScore(user.id, user.score + 1);
+    // await dispatch(s) todo : set user score
   }
 
-  const prevDifficulty = store.getState().game.selectedDifficulty;
+  const prevDifficulty = game.selectedDifficulty;
 
   await dispatch(setUserInGame(false));
-  dispatch(actions.resetGame());
+
+  await gameService.endGame({ ...game, id: game.gameId, isInProgress: false });
+
+  await dispatch(actions.resetGame());
 
   if (prevDifficulty && type === 'new') {
     dispatch(actions.setDifficulty(prevDifficulty));
@@ -191,4 +218,7 @@ export const selectWin = (state: ApplicationState) => {
 
 export const selectLoss = (state: ApplicationState) => {
   return state.game.isLoser;
+};
+export const selectGameIsLoading = (state: ApplicationState) => {
+  return state.game.isLoading;
 };

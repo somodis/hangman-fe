@@ -4,16 +4,17 @@ import { useSelector } from 'react-redux';
 import DifficultySelector from '../components/hangman/DifficultySelector';
 import Hangman from '../components/hangman/Hangman';
 
-import { selectGameState } from '../store/game';
+import { selectGameIsLoading, selectGameState } from '../store/game';
 
 const HomePage = () => {
   const gameInProgress = useSelector(selectGameState);
+  const isLoading = useSelector(selectGameIsLoading);
 
   useEffect(() => {
     console.log('useeff, gameInProgress', gameInProgress);
   }, [gameInProgress]);
 
-  return !gameInProgress ? <DifficultySelector /> : <Hangman />;
+  return !isLoading && !gameInProgress ? <DifficultySelector /> : <Hangman />;
 };
 
 export default HomePage;

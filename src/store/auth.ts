@@ -4,6 +4,7 @@ import { authService } from '../services';
 import { LoginCredentials } from '../models';
 import { Env } from '../config/env';
 import { getProfile, clearProfile } from './profile';
+import { initGame, resetGame } from './game';
 
 export const setTokenInStorage = (token?: string | null, refreshToken?: string) => {
   console.log('settokeninstorage');
@@ -53,11 +54,13 @@ export const initToken = () => async (dispatch: AppDispatch) => {
 export const logout = () => async (dispatch: AppDispatch) => {
   try {
     console.log('todo logout');
+    await localStorage.removeItem(Env.API_TOKEN_KEY);
     // await authService.logout(localStorage.getItem(Env.API_REFRESH_TOKEN_KEY));
     // await authService.logout();
   } finally {
     dispatch(actions.setToken(null));
     dispatch(clearProfile());
+    dispatch(resetGame());
   }
 };
 
@@ -74,6 +77,7 @@ export const login =
     console.log('login auth.ts');
 
     await dispatch(getProfile());
+    await dispatch(initGame());
 
     return token;
   };
