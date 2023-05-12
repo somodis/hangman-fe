@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import styles from './HangmanDrawing.module.scss';
 import { selectMistakeCount } from '../../store/game';
+import styles from './Hangman.module.scss';
 
 const HangmanDrawing = () => {
   const mistakeCount = useSelector(selectMistakeCount);
@@ -18,7 +18,7 @@ const HangmanDrawing = () => {
 
   return (
     <div>
-      <svg style={styles} width={300} height={300} viewBox="0 0 10 12">
+      <svg className={styles.svgDrawing} width={300} height={300} viewBox="0 0 10 12">
         <path d="M1,11 h8" />
         <path d="M9,11 v-10" />
         <path d="M9,1 h-4" />

@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import ExitToAppIcon from '@mui/icons-material/PowerSettingsNew';
-import { Tooltip } from '@mui/material';
+import { Button, Divider, Drawer, List, Tooltip } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { selectProfile } from '../../store/profile';
 import { routes } from '../../config/routes';
@@ -18,33 +19,93 @@ export const Header: FC = () => {
   const profile = useSelector(selectProfile);
   const dispatch = useDispatch<any>();
 
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const routesNav = routes.map(
+    (route) =>
+      profile &&
+      route.allowedFor?.includes(profile.role) && (
+        <NavLink key={route.title()} to={route.link || ''}>
+          <Typography variant="h6">{route.title()}</Typography>
+        </NavLink>
+      )
+  );
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        Logo
+      </Typography>
+      <Divider />
+      <List>
+        {routesNav}
+        <Button variant="outlined" onClick={handleLogout} startIcon={<ExitToAppIcon />}>
+          Logout
+        </Button>
+      </List>
+    </Box>
+  );
+
   return (
     <>
       <AppBar position="fixed">
         <Toolbar>
-          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" height="100%">
-            <Typography variant="h6">Logo</Typography>
-
-            <Box display="flex" alignItems="center">
-              {routes.map(
-                (route) =>
-                  profile &&
-                  route.allowedFor?.includes(profile.role) && (
-                    <NavLink key={route.title()} to={route.link || ''}>
-                      <Typography variant="h6">{route.title()}</Typography>
-                    </NavLink>
-                  )
-              )}
-
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+              Logo
+            </Typography>
+            <Box sx={{ display: { xs: 'none', sm: 'block', md: 'flex', alignItems: 'center' } }}>
+              {routesNav}
               <Tooltip title="Logout">
-                <IconButton onClick={() => dispatch(logout())} size="large">
-                  <ExitToAppIcon color="primary" />
+                <IconButton aria-label="logout" onClick={handleLogout} size="large">
+                  <ExitToAppIcon />
                 </IconButton>
               </Tooltip>
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
+      <Box component="nav">
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
       <Toolbar />
     </>
   );

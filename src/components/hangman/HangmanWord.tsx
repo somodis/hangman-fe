@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { Box } from '@mui/material';
+
 import { selectGuessedLetters, selectWordToGuess } from '../../store/game';
 
 type HangmanWordProps = {
@@ -12,31 +14,31 @@ const HangmanWord = ({ reveal = false }: HangmanWordProps) => {
   const wordToGuess = useSelector(selectWordToGuess);
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '.25em',
-        fontSize: '5rem',
-        fontWeight: 'bold',
+        gap: '.2em',
+        fontSize: '3rem',
         textTransform: 'uppercase',
-        fontFamily: 'monospace',
       }}
     >
       {wordToGuess?.word.split('').map((letter, index) => (
-        <span style={{ borderBottom: '.1em solid black' }} key={index}>
+        <span style={{ borderBottom: '2px solid #555', marginBottom: '1rem' }} key={index}>
           <span
             key={index}
             style={{
               visibility: guessedLetters.includes(letter) || reveal ? 'visible' : 'hidden',
-              color: !guessedLetters.includes(letter) && reveal ? 'red' : 'black',
+              color: !guessedLetters.includes(letter) && reveal ? 'red' : '#555',
+              fontWeight: 100,
+              fontSize: '2rem',
             }}
           >
             {letter}
           </span>
         </span>
       ))}
-    </div>
+    </Box>
   );
 };
 

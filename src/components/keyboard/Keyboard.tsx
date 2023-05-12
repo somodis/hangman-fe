@@ -39,14 +39,7 @@ const Keyboard = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        alignSelf: 'stretch',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(75px, 1fr))',
-        gap: '.5rem',
-      }}
-    >
+    <div className={styles.hangmanKeyboard}>
       {alphabet.map((key) => {
         const isInactive = guessedLetters.includes(key.toLowerCase());
         return (

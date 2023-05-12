@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 import Keyboard from '../keyboard/Keyboard';
 import HangmanWord from './HangmanWord';
@@ -9,16 +9,11 @@ import HangmanDrawing from './HangmanDrawing';
 import { endGame, selectLoss, selectMistakeCount, selectWin } from '../../store/game';
 
 const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser: boolean | undefined }) => {
-  useEffect(() => {
-    console.log('asd');
-  }, [isWinner, isLoser]);
-
   return (
-    <>
-      <h1>{isWinner == true && "You've Won! - Refresh to try again"}</h1>
-
-      <h1>{isLoser == true && 'Nice Try - Refresh to try again'}</h1>
-    </>
+    <Typography sx={{ color: isWinner ? 'green' : 'red' }}>
+      {isWinner == true && "You've Won!"}
+      {isLoser == true && "You've lost"}
+    </Typography>
   );
 };
 
@@ -34,15 +29,26 @@ const Hangman = () => {
   };
 
   return (
-    <div>
-      <Result isWinner={isWinner} isLoser={isLoser} />
-      <HangmanDrawing />
-      <HangmanWord reveal={isLoser} />
-      <Keyboard />
-      <h4>Mistake counter: {mistakeCount}</h4>
-      <Button onClick={() => handleClick()}>End Game</Button>
-      <Button onClick={() => handleClick('new')}>Start New Game</Button>
-    </div>
+    <Box sx={{ display: 'flex' }}>
+      <Box sx={{ width: '100%' }}>
+        <Typography variant="h5">Hangman Game</Typography>
+        <Result isWinner={isWinner} isLoser={isLoser} />
+        <HangmanWord reveal={isLoser} />
+        <Keyboard />
+        <Typography variant="body2">
+          Remaining possibility of failure: <b>{mistakeCount}</b>
+        </Typography>
+        <Button variant="outlined" onClick={() => handleClick()}>
+          End Game
+        </Button>
+        <Button variant="contained" onClick={() => handleClick('new')}>
+          Start New Game
+        </Button>
+      </Box>
+      <Box>
+        <HangmanDrawing />
+      </Box>
+    </Box>
   );
 };
 

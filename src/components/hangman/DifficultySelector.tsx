@@ -30,7 +30,13 @@ const DifficultySelector = () => {
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h4">Hangman Game</Typography>
         <Typography variant="body1">Choose a difficulty level</Typography>
-        <ToggleButtonGroup value={selectedDifficulty} exclusive onChange={selectDifficulty} orientation="vertical">
+        <ToggleButtonGroup
+          color="primary"
+          value={selectedDifficulty}
+          exclusive
+          onChange={selectDifficulty}
+          orientation="vertical"
+        >
           {Object.values(DifficultyLevel).map((level) => (
             <ToggleButton value={level} key={level}>
               {level}
@@ -38,7 +44,7 @@ const DifficultySelector = () => {
           ))}
         </ToggleButtonGroup>
 
-        <Button disabled={!selectedDifficulty} onClick={startGame}>
+        <Button variant="contained" color="primary" disabled={!selectedDifficulty} onClick={startGame}>
           {"Let's play"}
         </Button>
       </Box>
