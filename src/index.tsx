@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 import App from './pages/App';
 import store from './store';
@@ -17,6 +18,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
+        <CssBaseline />
         <ThemeProvider theme={theme}>
           <App />
           <ToastContainer />

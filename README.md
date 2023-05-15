@@ -2,6 +2,19 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Test users:
+
+username: `testuser`, pw: `test`, role: user
+
+username: `testadmin`, pw: `test`, role: admin
+
+## API
+
+https://github.com/somodis/hangman-be
+
+`http://localhost:3001` 
+
+
 ## Available Scripts
 
 In the project directory, you can run:

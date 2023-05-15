@@ -8,7 +8,6 @@ import { Header } from '../components/header/Header';
 export function PrivateLayout() {
   return (
     <PrivateRoute>
-      <CssBaseline />
       <Container maxWidth="xl" sx={{ minHeight: '100vh' }}>
         <Header />
 
