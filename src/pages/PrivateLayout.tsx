@@ -12,7 +12,7 @@ export function PrivateLayout() {
       <Container maxWidth="xl" sx={{ minHeight: '100vh' }}>
         <Header />
 
-        <Container maxWidth="md" sx={{ padding: '2rem', backgroundColor: '#fefefe' }}>
+        <Container maxWidth="md" sx={{ paddingY: '3rem', backgroundColor: '#fefefe', marginTop: '2.5rem' }}>
           <Outlet />
         </Container>
       </Container>

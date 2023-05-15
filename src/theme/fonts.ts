@@ -1,6 +1,6 @@
-import MontserratFont from 'assets/fonts/Montserrat-Regular.ttf';
-import MontserratSemiBoldFont from 'assets/fonts/Montserrat-SemiBold.ttf';
-import MontserratBoldFont from 'assets/fonts/Montserrat-Bold.ttf';
+import MontserratFont from '../assets/fonts/Montserrat-Regular.ttf';
+import MontserratSemiBoldFont from '../assets/fonts/Montserrat-SemiBold.ttf';
+import MontserratBoldFont from '../assets/fonts/Montserrat-Bold.ttf';
 
 export const Montserrat = `@font-face {
   font-family: "Montserrat";

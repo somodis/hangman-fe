@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { DifficultyLevel, GameModel, ResponseGameModel, WinOrLossModel } from '../models/game.model';
+import { DifficultyLevel, ResponseGameModel, WinOrLossModel } from '../models/game.model';
 import { gameService, userService, wordService } from '../services';
 import { setUserInGame } from './profile';
 import store from '.';
@@ -135,12 +135,11 @@ export const initGame = () => async (dispatch: AppDispatch) => {
 export const guess =
   ({ letter }: { letter: string }) =>
   async (dispatch: AppDispatch) => {
-
     const { gameId, wordToGuess } = store.getState().game;
     const user = store.getState().profile.profile;
-    
+
     await dispatch(addGuessedLetter(letter));
-    
+
     const { mistakes, guessedLetters } = store.getState().game;
 
     if (!gameId || !user || !wordToGuess) {
@@ -155,7 +154,6 @@ export const guess =
       mistakes: mistakes,
     });
 
-    console.log({ isWinner: checkIfWon(wordToGuess?.word, guessedLetters), isLoser: checkIfLost(mistakes) })
     dispatch(
       actions.setWinOrLoss({ isWinner: checkIfWon(wordToGuess?.word, guessedLetters), isLoser: checkIfLost(mistakes) })
     );

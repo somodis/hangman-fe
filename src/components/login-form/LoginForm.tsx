@@ -10,7 +10,7 @@ import { login } from '../../store/auth';
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (credentials: LoginCredentials) => {
     try {

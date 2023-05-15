@@ -10,9 +10,9 @@ import { endGame, selectLoss, selectMistakeCount, selectWin } from '../../store/
 
 const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser: boolean | undefined }) => {
   return (
-    <Typography sx={{ color: isWinner ? 'green' : 'red' }}>
+    <Typography sx={{ color: isWinner ? 'green' : 'red', fontWeight: 600 }} variant="h5">
       {isWinner == true && "You've Won!"}
-      {isLoser == true && "You've lost"}
+      {isLoser == true && "You've lost!"}
     </Typography>
   );
 };
@@ -20,7 +20,7 @@ const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser:
 const MAX_MISTAKES = 6;
 
 const Hangman = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const mistakeCount = useSelector(selectMistakeCount);
   const isWinner = useSelector(selectWin);
@@ -31,7 +31,7 @@ const Hangman = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column-reverse', sm: 'row' } }}>
       <Box sx={{ width: '100%' }}>
         <Typography variant="h5">Hangman Game</Typography>
         <Result isWinner={isWinner} isLoser={isLoser} />
@@ -40,12 +40,15 @@ const Hangman = () => {
         <Typography variant="body2">
           Remaining possibility of failure: <b>{MAX_MISTAKES - mistakeCount}</b>
         </Typography>
-        <Button variant="outlined" onClick={() => handleClick()}>
-          End Game
-        </Button>
-        <Button variant="contained" onClick={() => handleClick('new')}>
-          Start New Game
-        </Button>
+
+        <Box>
+          <Button variant="outlined" onClick={() => handleClick()} sx={{ marginRight: '1rem' }}>
+            End Game
+          </Button>
+          <Button variant="contained" onClick={() => handleClick('new')}>
+            Start New Game
+          </Button>
+        </Box>
       </Box>
       <Box>
         <HangmanDrawing />

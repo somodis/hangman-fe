@@ -8,18 +8,20 @@ import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import ExitToAppIcon from '@mui/icons-material/PowerSettingsNew';
-import { Button, Divider, Drawer, List, Tooltip } from '@mui/material';
+import { Avatar, Button, Divider, Drawer, List, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { selectProfile } from '../../store/profile';
 import { routes } from '../../config/routes';
 import { logout } from '../../store/auth';
+import LogoImg from '../../assets/images/react-icon.png';
+import styles from './Header.module.scss';
 
 export const Header: FC = () => {
   const profile = useSelector(selectProfile);
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState<boolean>(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -33,21 +35,27 @@ export const Header: FC = () => {
     (route) =>
       profile &&
       route.allowedFor?.includes(profile.role) && (
-        <NavLink key={route.title()} to={route.link || ''}>
-          <Typography variant="h6">{route.title()}</Typography>
+        <NavLink className={styles.navItem} key={route.title()} to={route.link || ''}>
+          <Typography variant="h6" sx={{ fontWeight: 400 }}>
+            {route.title()}
+          </Typography>
         </NavLink>
       )
   );
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Logo
-      </Typography>
+      <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+        <Avatar alt="Attrecto logo" src={LogoImg} />
+        <Typography variant="h6" sx={{ my: 2 }}>
+          Attrecto
+        </Typography>
+      </Box>
+
       <Divider />
       <List>
         {routesNav}
-        <Button variant="outlined" onClick={handleLogout} startIcon={<ExitToAppIcon />}>
+        <Button sx={{ marginTop: '1rem' }} variant="outlined" onClick={handleLogout} startIcon={<ExitToAppIcon />}>
           Logout
         </Button>
       </List>
@@ -56,7 +64,7 @@ export const Header: FC = () => {
 
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar sx={{ backgroundColor: '#fefefe' }} elevation={0} position="fixed">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -73,13 +81,13 @@ export const Header: FC = () => {
               alignItems: 'center',
               justifyContent: 'space-between',
               width: '100%',
-              height: '100%',
             }}
           >
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
-              Logo
+            <Avatar alt="Attrecto logo" src={LogoImg} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'inline-block' } }}>
+              Attrecto
             </Typography>
-            <Box sx={{ display: { xs: 'none', sm: 'block', md: 'flex', alignItems: 'center' } }}>
+            <Box sx={{ display: { xs: 'none', sm: 'flex', alignItems: 'center' } }}>
               {routesNav}
               <Tooltip title="Logout">
                 <IconButton aria-label="logout" onClick={handleLogout} size="large">

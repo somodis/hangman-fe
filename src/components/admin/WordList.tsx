@@ -1,17 +1,17 @@
 import React from 'react';
+import { Box, Typography } from '@mui/material';
 
 import { WordModel } from '../../models';
-import { Typography } from '@mui/material';
 
 const WordList = ({ words }: { words: WordModel[] }) => {
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+        gridTemplateColumns: { sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
         margin: '0 auto',
         gap: '.1rem',
-        maxWidth: '500px',
+        columnGap: '.5rem',
       }}
     >
       {words.map(({ word }) => {
@@ -21,7 +21,7 @@ const WordList = ({ words }: { words: WordModel[] }) => {
           </Typography>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

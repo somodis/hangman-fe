@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Keyboard.module.scss';
 import alphabet from '../../assets/alphabet.json';
 
-import store from '../../store';
 import { guess, selectGuessedLetters } from '../../store/game';
-import { getWord } from '../../utils/words';
 
 const Keyboard = () => {
   const guessedLetters = useSelector(selectGuessedLetters);
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const addLetter = async (letter: string) => {
-    await dispatch(guess({ letter }));
-  };
+  const addLetter = useCallback(
+    async (letter: string) => {
+      await dispatch(guess({ letter }));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     const keyPressHandler = async (e: KeyboardEvent) => {
@@ -24,11 +25,7 @@ const Keyboard = () => {
 
       e.preventDefault();
 
-      if (key === 'Enter') {
-        await dispatch(getWord());
-      } else {
-        addLetter(key.toLowerCase());
-      }
+      addLetter(key.toLowerCase());
     };
 
     document.addEventListener('keypress', keyPressHandler);
@@ -36,7 +33,7 @@ const Keyboard = () => {
     return () => {
       document.removeEventListener('keypress', keyPressHandler);
     };
-  }, []);
+  }, [dispatch, addLetter]);
 
   return (
     <div className={styles.hangmanKeyboard}>
