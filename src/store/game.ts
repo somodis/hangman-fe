@@ -112,13 +112,19 @@ export const setGame = () => async (dispatch: AppDispatch) => {
     return;
   }
 
-  await dispatch(actions.setIsGameLoading(true));
-  const game = await gameService.startGame({ userId: user.id, wordId: word.id });
-  await dispatch(actions.setIsGameLoading(false));
+  // await dispatch(actions.setIsGameLoading(true));
+  const game = await gameService.startGame({
+    userId: user.id,
+    wordId: word.id,
+    mistakes: 0,
+    isInProgress: true,
+    guessedLetters: [],
+  });
+  // await dispatch(actions.setIsGameLoading(false));
 
   await dispatch(setUserInGame(true));
-  dispatch(actions.setGameInProgress(true));
-  dispatch(actions.setGameId(game.id));
+  await dispatch(actions.setGameInProgress(true));
+  await dispatch(actions.setGameId(game.id));
 };
 
 export const initGame = () => async (dispatch: AppDispatch) => {
@@ -143,15 +149,17 @@ export const guess =
     const { mistakes, guessedLetters } = store.getState().game;
 
     if (!gameId || !user || !wordToGuess) {
+      // if (!user || !wordToGuess) {
       return;
     }
 
     await gameService.autoSaveGame({
       id: gameId,
       userId: user.id,
-      guessedLetters: guessedLetters,
+      guessedLetters,
       isInProgress: true,
-      mistakes: mistakes,
+      mistakes,
+      wordId: wordToGuess.id,
     });
 
     dispatch(
@@ -161,9 +169,9 @@ export const guess =
 
 export const endGame = (type?: 'new' | 'end') => async (dispatch: AppDispatch) => {
   const user = store.getState().profile.profile;
-  const game = store.getState().game;
+  const { gameId, wordToGuess, selectedDifficulty, ...game } = store.getState().game;
 
-  if (!user || !game.gameId) {
+  if (!user || !gameId) {
     return;
   }
 
@@ -172,11 +180,11 @@ export const endGame = (type?: 'new' | 'end') => async (dispatch: AppDispatch) =
     // await dispatch(s) todo : set user score
   }
 
-  const prevDifficulty = game.selectedDifficulty;
+  const prevDifficulty = selectedDifficulty;
 
   await dispatch(setUserInGame(false));
 
-  await gameService.endGame({ ...game, id: game.gameId, isInProgress: false });
+  await gameService.endGame({ ...game, id: gameId, isInProgress: false, wordId: wordToGuess?.id, userId: user.id });
 
   await dispatch(actions.resetGame());
 
@@ -187,33 +195,17 @@ export const endGame = (type?: 'new' | 'end') => async (dispatch: AppDispatch) =
   }
 };
 
-export const selectGameState = (state: ApplicationState) => {
-  return state.game.gameInProgress;
-};
+export const selectGameState = (state: ApplicationState) => state.game.gameInProgress;
 
-export const selectDifficultyLevel = (state: ApplicationState) => {
-  return state.game.selectedDifficulty;
-};
+export const selectDifficultyLevel = (state: ApplicationState) => state.game.selectedDifficulty;
 
-export const selectWordToGuess = (state: ApplicationState) => {
-  return state.game.wordToGuess;
-};
+export const selectWordToGuess = (state: ApplicationState) => state.game.wordToGuess;
 
-export const selectGuessedLetters = (state: ApplicationState) => {
-  return state.game.guessedLetters;
-};
+export const selectGuessedLetters = (state: ApplicationState) => state.game.guessedLetters;
 
-export const selectMistakeCount = (state: ApplicationState) => {
-  return state.game.mistakes;
-};
+export const selectMistakeCount = (state: ApplicationState) => state.game.mistakes;
 
-export const selectWin = (state: ApplicationState) => {
-  return state.game.isWinner;
-};
+export const selectWin = (state: ApplicationState) => state.game.isWinner;
 
-export const selectLoss = (state: ApplicationState) => {
-  return state.game.isLoser;
-};
-export const selectIsGameLoading = (state: ApplicationState) => {
-  return state.game.isLoading;
-};
+export const selectLoss = (state: ApplicationState) => state.game.isLoser;
+export const selectIsGameLoading = (state: ApplicationState) => state.game.isLoading;

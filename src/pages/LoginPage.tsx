@@ -2,8 +2,7 @@ import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import LoginForm from '../components/login-form/LoginForm';
 
-const LoginPage = () => {
-  return (
+const LoginPage = () => (
     <>
       <Container component="main" maxWidth="xs">
         <Box
@@ -22,10 +21,8 @@ const LoginPage = () => {
           </Typography>
           <LoginForm />
         </Box>
-        
       </Container>
     </>
   );
-};
 
 export default LoginPage;

@@ -20,7 +20,7 @@ class UserService {
   async saveUserScore(userId: number, score: number) {
     return request<UserModel>({
       resource: `${this.resource}/${userId}`,
-      data: { id: userId, score: score, isInGame: false },
+      data: { id: userId, score, isInGame: false },
       method: Methods.PATCH,
     });
   }

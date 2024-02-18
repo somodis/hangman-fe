@@ -61,9 +61,7 @@ export const setUserInGame = (isInGame: boolean) => async (dispatch: AppDispatch
   dispatch(actions.setProfile({ ...user, isInGame }));
 };
 
-export const selectProfile = (state: ApplicationState) => {
-  return state.profile.profile;
-};
+export const selectProfile = (state: ApplicationState) => state.profile.profile;
 
 export const selectUserRoles = (state: ApplicationState) => {
   const profile = selectProfile(state);

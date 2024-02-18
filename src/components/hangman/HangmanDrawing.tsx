@@ -1,12 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
-import { selectMistakeCount } from '../../store/game';
 import styles from './Hangman.module.scss';
 
-const HangmanDrawing = () => {
-  const mistakeCount = useSelector(selectMistakeCount);
+interface HangmanDrawingProps {
+  mistakeCount: number;
+}
 
+const HangmanDrawing = ({ mistakeCount }: HangmanDrawingProps) => {
   const HEAD = <circle cx="5" cy="4" r="1" key="head" />;
   const BODY = <path d="M5,5 v3" key="body" />;
   const LHAND = <path d="M5,5 l-2,2" key="lhand" />;

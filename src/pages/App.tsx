@@ -31,7 +31,7 @@ const App: FC = () => {
 
   useEffect(() => {
     initApp();
-  }, [dispatch]);
+  }, [dispatch, initApp]);
 
   const authenticatedRoutes = filterRoutes(routes, role);
   const defaultRoute = authenticatedRoutes?.length ? authenticatedRoutes[0].path || '/' : '/';

@@ -6,16 +6,14 @@ import Keyboard from '../keyboard/Keyboard';
 import HangmanWord from './HangmanWord';
 import HangmanDrawing from './HangmanDrawing';
 
-import { endGame, selectLoss, selectMistakeCount, selectWin } from '../../store/game';
+import { endGame, selectGuessedLetters, selectLoss, selectMistakeCount, selectWin } from '../../store/game';
 
-const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser: boolean | undefined }) => {
-  return (
+const Result = ({ isWinner, isLoser }: { isWinner: boolean | undefined; isLoser: boolean | undefined }) => (
     <Typography sx={{ color: isWinner ? 'green' : 'red', fontWeight: 600 }} variant="h5">
       {isWinner == true && "You've Won!"}
       {isLoser == true && "You've lost!"}
     </Typography>
   );
-};
 
 const MAX_MISTAKES = 6;
 
@@ -25,6 +23,7 @@ const Hangman = () => {
   const mistakeCount = useSelector(selectMistakeCount);
   const isWinner = useSelector(selectWin);
   const isLoser = useSelector(selectLoss);
+  const guessedLetters = useSelector(selectGuessedLetters);
 
   const handleClick = async (type?: 'new' | undefined) => {
     await dispatch(endGame(type));
@@ -35,8 +34,8 @@ const Hangman = () => {
       <Box sx={{ width: '100%' }}>
         <Typography variant="h5">Hangman Game</Typography>
         <Result isWinner={isWinner} isLoser={isLoser} />
-        <HangmanWord reveal={isLoser} />
-        <Keyboard />
+        <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} />
+        <Keyboard guessedLetters={guessedLetters} />
         <Typography variant="body2">
           Remaining possibility of failure: <b>{MAX_MISTAKES - mistakeCount}</b>
         </Typography>
@@ -51,7 +50,7 @@ const Hangman = () => {
         </Box>
       </Box>
       <Box>
-        <HangmanDrawing />
+        <HangmanDrawing mistakeCount={mistakeCount} />
       </Box>
     </Box>
   );

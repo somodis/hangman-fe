@@ -1,4 +1,4 @@
-import words from './../assets/words.json';
+import words from "../assets/words.json";
 
 export function getWord(): string {
   return getRandomItem(words).toUpperCase();

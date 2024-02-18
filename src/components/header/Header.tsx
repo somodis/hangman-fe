@@ -46,9 +46,9 @@ export const Header: FC = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-        <Avatar alt="Attrecto logo" src={LogoImg} />
+        <Avatar alt="Logo" src={LogoImg} />
         <Typography variant="h6" sx={{ my: 2 }}>
-          Attrecto
+          Noose Nonsense
         </Typography>
       </Box>
 
@@ -83,9 +83,9 @@ export const Header: FC = () => {
               width: '100%',
             }}
           >
-            <Avatar alt="Attrecto logo" src={LogoImg} />
+            <Avatar alt="Logo" src={LogoImg} />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'inline-block' } }}>
-              Attrecto
+              Noose Nonsense
             </Typography>
             <Box sx={{ display: { xs: 'none', sm: 'flex', alignItems: 'center' } }}>
               {routesNav}

@@ -1,8 +1,7 @@
 import { ComponentType, ReactNode } from 'react';
 import { SvgIconProps } from '@mui/material';
 
-import { AccessRestriction } from '../utils/auth';
-import { AllowedFor } from '../utils/auth';
+import { AccessRestriction , AllowedFor } from '../utils/auth';
 
 interface BaseRouteConfigurationModel extends AccessRestriction {
   link?: string;
@@ -11,7 +10,7 @@ interface BaseRouteConfigurationModel extends AccessRestriction {
   component?: ReactNode;
 }
 
-export interface RouteChildrenConfigurationModel extends Required<BaseRouteConfigurationModel> {}
+export type RouteChildrenConfigurationModel = Required<BaseRouteConfigurationModel>
 
 export interface RouteConfigurationModel extends BaseRouteConfigurationModel {
   icon: ComponentType<SvgIconProps>;

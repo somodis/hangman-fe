@@ -13,9 +13,11 @@ export interface GameModel {
   userId: number;
 }
 export interface StartGameModel {
-  guessedLetters?: string[];
+  guessedLetters: string[];
   wordId: number;
   userId: number;
+  mistakes: number;
+  isInProgress: boolean;
 }
 export interface ResponseGameModel {
   id: number;
@@ -23,7 +25,7 @@ export interface ResponseGameModel {
   word: WordModel;
   wordId: number;
   userId: number;
-  isInProgress: boolean;
+  isInProgress?: boolean;
   mistakes: number;
 }
 export interface AutoSaveGameModel {

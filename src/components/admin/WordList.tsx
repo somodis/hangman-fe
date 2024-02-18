@@ -3,8 +3,7 @@ import { Box, Typography } from '@mui/material';
 
 import { WordModel } from '../../models';
 
-const WordList = ({ words }: { words: WordModel[] }) => {
-  return (
+const WordList = ({ words }: { words: WordModel[] }) => (
     <Box
       sx={{
         display: 'grid',
@@ -14,15 +13,12 @@ const WordList = ({ words }: { words: WordModel[] }) => {
         columnGap: '.5rem',
       }}
     >
-      {words.map(({ word }) => {
-        return (
+      {words.map(({ word }) => (
           <Typography key={word} variant="body2">
             {word}
           </Typography>
-        );
-      })}
+        ))}
     </Box>
   );
-};
 
 export default WordList;

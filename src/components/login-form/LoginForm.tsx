@@ -42,7 +42,7 @@ const LoginForm = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{display: 'grid', gap: '1rem'}}>
+    <form onSubmit={formik.handleSubmit} style={{ display: 'grid', gap: '1rem' }}>
       <TextField
         value={formik.values.username}
         onChange={formik.handleChange}

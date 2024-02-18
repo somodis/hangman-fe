@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import styles from './Keyboard.module.scss';
 import alphabet from '../../assets/alphabet.json';
 
-import { guess, selectGuessedLetters } from '../../store/game';
+import { guess } from '../../store/game';
 
-const Keyboard = () => {
-  const guessedLetters = useSelector(selectGuessedLetters);
+interface KeyboardProps {
+  guessedLetters: string[];
+}
+
+const Keyboard = ({ guessedLetters }: KeyboardProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const addLetter = useCallback(
@@ -19,13 +22,13 @@ const Keyboard = () => {
 
   useEffect(() => {
     const keyPressHandler = async (e: KeyboardEvent) => {
-      const key = e.key;
+      const {key} = e;
 
       if (!key.match(/^[a-z]$/) && key !== 'Enter') return;
 
       e.preventDefault();
 
-      addLetter(key.toLowerCase());
+      addLetter(key);
     };
 
     document.addEventListener('keypress', keyPressHandler);

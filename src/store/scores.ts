@@ -31,6 +31,4 @@ export const getScoreBoard = () => async (dispatch: AppDispatch) => {
   return scores;
 };
 
-export const selectScoreBoard = (state: ApplicationState) => {
-  return state.scores.scoreboard;
-};
+export const selectScoreBoard = (state: ApplicationState) => state.scores.scoreboard;

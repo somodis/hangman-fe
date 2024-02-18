@@ -75,6 +75,4 @@ export const login =
     return token;
   };
 
-export const selectIsLoggedIn = (state: ApplicationState) => {
-  return Boolean(state.profile.profile);
-};
+export const selectIsLoggedIn = (state: ApplicationState) => Boolean(state.profile.profile);

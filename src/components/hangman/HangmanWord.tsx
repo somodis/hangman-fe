@@ -1,16 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-
 import { Box } from '@mui/material';
 
-import { selectGuessedLetters, selectWordToGuess } from '../../store/game';
+import { selectWordToGuess } from '../../store/game';
 
-type HangmanWordProps = {
+interface HangmanWordProps {
   reveal?: boolean;
-};
+  guessedLetters: string[];
+}
 
-const HangmanWord = ({ reveal = false }: HangmanWordProps) => {
-  const guessedLetters = useSelector(selectGuessedLetters);
+const HangmanWord = ({ reveal = false, guessedLetters }: HangmanWordProps) => {
   const wordToGuess = useSelector(selectWordToGuess);
 
   return (

@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { wordService } from '../../services';
 import { WordModel } from '../../models';
+
 interface AddWordState {
   word: string;
 }
@@ -36,7 +37,7 @@ const NewWordForm = ({ words }: { words: WordModel[] }) => {
     try {
       setIsLoading(true);
       setError('');
-      const res = await wordService.addWord({ word });
+      await wordService.addWord({ word });
     } catch (e) {
       setError('Invalid word');
       setIsLoading(false);

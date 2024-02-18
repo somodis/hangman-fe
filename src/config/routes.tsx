@@ -1,9 +1,9 @@
 import React from 'react';
+import UsersIcon from '@mui/icons-material/People';
+import ComponentsIcon from '@mui/icons-material/Dashboard';
 import { RouteConfigurationModel } from '../models';
 import { Role } from '../config/roles';
 
-import UsersIcon from '@mui/icons-material/People';
-import ComponentsIcon from '@mui/icons-material/Dashboard';
 
 import AdminPage from '../pages/AdminPage';
 import ScoreboardPage from '../pages/ScoreboardPage';
